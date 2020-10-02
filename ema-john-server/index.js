@@ -5,8 +5,7 @@ const MongoClient = require("mongodb").MongoClient;
 
 const app = express();
 
-const uri =
-  "mongodb+srv://9t6:livelovedie@cluster0.dupvj.mongodb.net/ema-john?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dupvj.mongodb.net/ema-john?retryWrites=true&w=majority`;
 app.use(cors());
 app.use(bodyParser.json());
 const port = 5000;
@@ -67,6 +66,6 @@ app.get("/", (req, res) => {
   res.send("Hello Tazwar!");
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
