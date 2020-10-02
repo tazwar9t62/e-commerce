@@ -44,6 +44,13 @@ client.connect((err) => {
 
       .toArray((err, documents) => res.send(documents[0]));
   });
+
+  app.post("/productsByKeys", (req, res) => {
+    const productKeys = req.body;
+    collection
+      .find({ key: { $in: productKeys } })
+      .toArray((err, documents) => res.send(documents));
+  });
 });
 
 app.get("/", (req, res) => {
