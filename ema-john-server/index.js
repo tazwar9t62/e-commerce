@@ -21,13 +21,14 @@ const client = new MongoClient(
 
 client.connect((err) => {
   const collection = client.db("ema-john").collection("products");
+  const orderCollection = client.db("ema-john").collection("orders");
   // perform actions on the collection object
   // console.log("database connected");
   app.post("/addProduct", (req, res) => {
     const products = req.body;
     // console.log(products);
     // console.log("database connected");
-    collection.insertMany(products).then((result) => {
+    collection.insertOne(products).then((result) => {
       res.send(result.insertedCount);
     });
   });
@@ -43,6 +44,15 @@ client.connect((err) => {
       .find({ key: req.params.key })
 
       .toArray((err, documents) => res.send(documents[0]));
+  });
+
+  app.post("/addOrder", (req, res) => {
+    const order = req.body;
+    // console.log(products);
+    // console.log("database connected");
+    orderCollection.insertOne(order).then((result) => {
+      res.send(result.insertedCount > 0);
+    });
   });
 
   app.post("/productsByKeys", (req, res) => {
