@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Shipment.css";
 import { useContext } from "react";
@@ -9,14 +9,20 @@ import ProcessPayment from "../ProcessPayment/ProcessPayment";
 const Shipment = () => {
   const { register, handleSubmit, watch, errors } = useForm();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [shippingData, setShippingData] = useState(null);
   const onSubmit = (data) => {
     // console.log('form submitted', data)
+    setShippingData(data);
+  };
+
+  const handleSuccessPayment = (paymentID) => {
     const savedCart = getDatabaseCart();
     console.log(savedCart);
     const orderDetails = {
       ...loggedInUser,
       products: savedCart,
-      shipment: data,
+      shipment: shippingData,
+      paymentID,
       orderTime: new Date(),
     };
     fetch("http://localhost:5000/addOrder", {
@@ -39,7 +45,10 @@ const Shipment = () => {
 
   return (
     <div className="row">
-      <div className="col-md-6">
+      <div
+        style={{ display: shippingData ? "none" : "block" }}
+        className="col-md-6"
+      >
         <form className="ship-form" onSubmit={handleSubmit(onSubmit)}>
           <input
             name="name"
@@ -76,9 +85,12 @@ const Shipment = () => {
           <input type="submit" />
         </form>
       </div>
-      <div className="col-md-6">
+      <div
+        style={{ display: shippingData ? "block" : "none" }}
+        className="col-md-6"
+      >
         <h2>Pay now</h2>
-        <ProcessPayment />
+        <ProcessPayment handlePayment={handleSuccessPayment} />
       </div>
     </div>
   );
