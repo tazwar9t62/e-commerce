@@ -26,6 +26,7 @@ const Review = () => {
 
   useEffect(() => {
     //cart
+    document.title = "Review";
     const savedCart = getDatabaseCart();
     const productKeys = Object.keys(savedCart);
     fetch("http://localhost:5000/productsByKeys", {

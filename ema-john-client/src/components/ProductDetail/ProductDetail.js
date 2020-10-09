@@ -6,6 +6,7 @@ const ProductDetail = () => {
   const { productKey } = useParams();
   let [product, setProduct] = useState({});
   useEffect(() => {
+    document.title = "Product details";
     fetch("http://localhost:5000/product/" + productKey)
       .then((res) => res.json())
       .then((result) => setProduct(result));

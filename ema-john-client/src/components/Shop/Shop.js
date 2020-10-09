@@ -8,6 +8,7 @@ import {
   getDatabaseCart,
 } from "../../utilities/databaseManager";
 import { Link } from "react-router-dom";
+import { LinearProgress } from "@material-ui/core";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -19,6 +20,8 @@ const Shop = () => {
       .then((data) => setProducts(data));
   });
   useEffect(() => {
+    document.title = "Shop";
+
     const savedCart = getDatabaseCart();
     const productKeys = Object.keys(savedCart);
     fetch("http://localhost:5000/productsByKeys", {
@@ -53,6 +56,13 @@ const Shop = () => {
   return (
     <div className="twin-container">
       <div className="product-container">
+        {products.length === 0 && (
+          <img
+            style={{ width: "100%", height: "100%" }}
+            src="https://i.pinimg.com/originals/72/66/03/7266036c9f3383d21730484150602f01.gif"
+            alt=""
+          />
+        )}
         {products.map((pd) => (
           <Product
             key={pd.key}
