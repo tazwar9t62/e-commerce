@@ -13,7 +13,7 @@ const stripePromise = loadStripe(
 const ProcessPayment = () => {
   return (
     <Elements stripe={stripePromise}>
-      <SplitForm />
+      <PaymentCardForm />
     </Elements>
   );
 };

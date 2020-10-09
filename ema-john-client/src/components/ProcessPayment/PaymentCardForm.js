@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const PaymentCardForm = () => {
@@ -27,19 +27,29 @@ const PaymentCardForm = () => {
     });
 
     if (error) {
+      setPaymentError(error.message);
+      setPaymentSuccess(null);
       console.log("[error]", error);
     } else {
+      setPaymentSuccess(paymentMethod.id);
+      setPaymentError(null);
       console.log("[PaymentMethod]", paymentMethod);
     }
   };
+  const [paymentError, setPaymentError] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(null);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement />
-      <button type="submit" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <CardElement />
+        <button type="submit" disabled={!stripe}>
+          Pay
+        </button>
+      </form>
+      {paymentError && <p style={{ color: "red" }}>{paymentError}</p>}
+      {paymentSuccess && <p style={{ color: "green" }}>Successful Payment!</p>}
+    </div>
   );
 };
 
